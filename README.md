@@ -28,8 +28,7 @@ Sea surface temperature                                 | ERA5                | 
 
 Output variable                                         | Phase 1 source      | Phase 2 source
 --------------------------------------------------------|---------------------|--------------
-Dissolved inorganic carbon (DIC)                        | B-SOSE              | Global Ocean Data Analysis Project version 2 (GLODAPv2) shipboard measurements
-                                                        |                     | Southern Ocean Carbon and Climate Observations and Modeling (SOCCOM) biogeochemical Argo floats
+Dissolved inorganic carbon (DIC)                        | B-SOSE              | Global Ocean Data Analysis Project version 2 (GLODAPv2) shipboard measurements <br/> Southern Ocean Carbon and Climate Observations and Modeling (SOCCOM) biogeochemical Argo floats
 
 ### References
 1. Landschützer, P., Gruber, N., Bakker, D. C. E.: Decadal variations and trends of the global ocean carbon sink, Global Biogeochemical Cycles, 30, doi:10.1002/2015GB005359, 2016
