@@ -24,7 +24,8 @@ Surface Chlorophyll-a concentration                     | B-SOSE              | 
 Zonal component of ocean surface wind speed             | ERA5                | ERA5
 Meridional component of ocean surface wind speed        | ERA5                | ERA5
 Sea surface temperature                                 | ERA5                | ERA5
---------------------------------------------------------|---------------------|--------------
+
+
 Output variable                                         | Phase 1 source      | Phase 2 source
 --------------------------------------------------------|---------------------|--------------
 
