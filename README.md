@@ -37,5 +37,5 @@ The SOC model takes vectors of 10 predictors mentioned above and outputs DIC pro
 ### Test
 ### DIC calculation from 1998 to 2019
 
-### References
+## References
 1. Landschützer, P., Gruber, N., Bakker, D. C. E.: Decadal variations and trends of the global ocean carbon sink, Global Biogeochemical Cycles, 30, doi:10.1002/2015GB005359, 2016
