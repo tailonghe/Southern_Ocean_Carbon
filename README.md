@@ -1,4 +1,4 @@
-# Southern_Ocean_Carbon
+# Southern Ocean Carbon
 This Southern Ocean Carbon (SOC) model applies the convolutional neural networks and long short-term memory units to predict dissolved carbon dioxide profiles in the Southern Ocean using physical parameters that are readily available from satellite observations and climate reanalysis.
 
 ## Prerequisites
