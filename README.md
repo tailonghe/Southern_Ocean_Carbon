@@ -35,7 +35,10 @@ Dissolved inorganic carbon (DIC)                        | B-SOSE              | 
 The SOC model takes vectors of 10 predictors mentioned above and outputs DIC profiles at 48 levels (from surface to 4 km depth as defined in B-SOSE).
 ### Train 
 ### Test
+
 ### DIC calculation from 1998 to 2019
+
+## Evaluation of model performance
 
 ## References
 1. Landschützer, P., Gruber, N., Bakker, D. C. E.: Decadal variations and trends of the global ocean carbon sink, Global Biogeochemical Cycles, 30, doi:10.1002/2015GB005359, 2016
