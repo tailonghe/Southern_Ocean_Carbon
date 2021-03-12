@@ -14,23 +14,23 @@ Keras       | 2.3.1
 ## Multi-phase training and datasets
 We propose a multi-phase training stratety to train the model. In phase 1, we use simulation diagnostics from the Biogeochemical Southern Ocean State Estimate (B-SOSE) data assimilation system. In phase 2, we train the model using observational data sets and climate reanalysis data sets. The input/output variables for both training phases are shown below:
 
-Input variable                                          | Phase 1 source      | Phase 2 source
---------------------------------------------------------|---------------------|--------------
-Sea surface height anomaly (SSHA)                       | B-SOSE              | Copernicus Marine Service
-Flux of CO2 due to air-sea exchange (pCO2)              | B-SOSE              | Landschützer et al., 2016
-Heat flux                                               | B-SOSE              | ERA5
-Zonal component of ocean surface current velocity       | B-SOSE              | OSCAR (Ocean Surface Current Analysis Real-time)
-Meridional component of ocean surface current velocity  | B-SOSE              | OSCAR (Ocean Surface Current Analysis Real-time)
-Vertical component of ocean surface current velocity    | B-SOSE              | Derived from SSHA
-Surface Chlorophyll-a concentration                     | B-SOSE              | The GlobColour project
-Zonal component of ocean surface wind speed             | ERA5                | ERA5
-Meridional component of ocean surface wind speed        | ERA5                | ERA5
-Sea surface temperature                                 | ERA5                | ERA5
+Input variable                                            | Phase 1 source      | Phase 2 source
+----------------------------------------------------------|---------------------|--------------
+Sea surface height anomaly (SSHA)                         | B-SOSE  ([Link](http://sose.ucsd.edu/BSOSE_iter105_solution.html))             | Copernicus Marine Service ([Link](https://resources.marine.copernicus.eu/?option=com_csw&view=details&product_id=SEALEVEL_GLO_PHY_L4_REP_OBSERVATIONS_008_047))
+Flux of CO2 due to air-sea exchange (pCO2)                | B-SOSE              | Landschützer et al., 2016 ([Link](https://www.ncei.noaa.gov/access/ocean-carbon-data-system/oceans/SPCO2_1982_present_ETH_SOM_FFN.html))
+Heat flux (Tflx)                                          | B-SOSE              | ERA5
+Zonal component of ocean surface current velocity (U)     | B-SOSE              | OSCAR (Ocean Surface Current Analysis Real-time) ([Link](https://podaac.jpl.nasa.gov/dataset/OSCAR_L4_OC_third-deg))
+Meridional component of ocean surface current velocity (V)| B-SOSE              | OSCAR (Ocean Surface Current Analysis Real-time)
+Vertical component of ocean surface current velocity (W)  | B-SOSE              | Derived from SSHA
+Surface Chlorophyll-a concentration (CHL-a)               | B-SOSE              | The GlobColour project ([Link](https://hermes.acri.fr/))
+Zonal component of ocean surface wind speed (u10m)        | ERA5 ([Link](https://cds.climate.copernicus.eu/cdsapp#!/dataset/reanalysis-era5-single-levels?tab=overview))               | ERA5
+Meridional component of ocean surface wind speed (v10m)   | ERA5                | ERA5
+Sea surface temperature (SST)                             | ERA5                | ERA5
 
 
 Output variable                                         | Phase 1 source      | Phase 2 source
 --------------------------------------------------------|---------------------|--------------
-Dissolved inorganic carbon (DIC)                        | B-SOSE              | Global Ocean Data Analysis Project version 2 (GLODAPv2) shipboard measurements<br />**and**<br />Southern Ocean Carbon and Climate Observations and Modeling (SOCCOM) biogeochemical Argo floats
+Dissolved inorganic carbon (DIC)                        | B-SOSE              | Global Ocean Data Analysis Project version 2 (GLODAPv2) shipboard measurements ([Link](https://www.ncei.noaa.gov/access/ocean-carbon-data-system/oceans/GLODAPv2/))<br />**and**<br />Southern Ocean Carbon and Climate Observations and Modeling (SOCCOM) biogeochemical Argo floats ([Link1](https://soccom.princeton.edu/) or [Link2](http://www3.mbari.org/SOCCOM/))
 
 ## Getting started
 ### Generating data pairs
@@ -67,4 +67,4 @@ python test_model.py --x 1998_2019_predictors/*_predictors.npy --w pretrained_mo
 ## Evaluation of model performance
 
 ## References
-1. Landschützer, P., Gruber, N., Bakker, D. C. E.: Decadal variations and trends of the global ocean carbon sink, Global Biogeochemical Cycles, 30, doi:10.1002/2015GB005359, 2016
+1. Landschützer, P., Gruber, N., Bakker, D. C. E.: Decadal variations and trends of the global ocean carbon sink, Global Biogeochemical Cycles, 30, [doi:10.1002/2015GB005359](https://doi.org/10.1002/2015GB005359), 2016
