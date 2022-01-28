@@ -1,12 +1,15 @@
-from scripts.model import SOC_model
 import numpy as np
-from scripts.utils import r2_score, nonzero_mse, data_split
-from keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam
 from keras.callbacks import CSVLogger, EarlyStopping, ModelCheckpoint
 import argparse
 import sys
 import glob
 from datetime import datetime
+
+from model.core import RUnet_model
+from utils.functions import r_score, mse_nonzero, data_split
+from utils.data_generator import data_generator
+
 
 
 def parse_args():
@@ -22,6 +25,15 @@ def parse_args():
     parser.add_argument('--y', dest='y_files',
                         help='Filenames of y data',
                         default=None, type=str, nargs='+')
+
+    parser.add_argument('--lvl1', dest='level1',
+                        help='First (upper) layer',
+                        default=None, type=int, nargs=1)
+
+    parser.add_argument('--lvl2', dest='level2',
+                        help='Second (lower) layer',
+                        default=None, type=int, nargs=1)
+
 
     # datetime object containing current date and time
     now = datetime.now()
@@ -44,13 +56,17 @@ def parse_args():
                         default=5, type=int, nargs='?')
 
 
-    if len(sys.argv) < 3:
+    if len(sys.argv) < 5:
         parser.print_help()
         sys.exit(1)
 
     args = parser.parse_args()
 
     if (not args.x_files) or (not args.y_files):
+        parser.print_help()
+        sys.exit(1)
+
+    if (not args.level1) or (not args.level2):
         parser.print_help()
         sys.exit(1)
 
@@ -63,37 +79,38 @@ if __name__ == '__main__':
     print('Called with args: ')
     print('X filenames: ', args.x_files)
     print('Y filenames: ', args.y_files)
+    print('First level: ', args.level1)
+    print('Second level: ', args.level2)
     print('Batch size: ', args.batch_size)
     print('Learning rate: ', args.lr)
     print('Output model name: ', args.outname)
 
-    _xfiles = args.x_files
-    _yfiles = args.y_files
+    _xfiles = np.array(sorted(args.x_files))
+    _yfiles = np.array(sorted(args.y_files))
+    _level1 = args.level1[0]
+    _level2 = args.level2[0]
     _batchsize = args.batch_size
     _lr = args.lr
 
-    soc_model = SOC_model()
+    soc_model = RUnet_model(_level1, _level2)
     opt = Adam(lr=_lr) 
-    soc_model.compile(optimizer=opt, loss=nonzero_mse, metrics=[r2_score, nonzero_mse])
-    soc_model.summary()
+    soc_model.compile(optimizer=opt, loss=mse_nonzero, metrics=[r_score, mse_nonzero])
+    soc_model.info()
 
+    # load pretrained model weights if provided
     if args.weights:
         soc_model.load_weights(args.weights)
 
-    X = np.concatenate([np.load(f) for f in _xfiles], axis=0)
-    Y = np.concatenate([np.load(f) for f in _yfiles], axis= 0)
-    X[:, :, 1] = X[:, :, 1] * 1e-6
-    Y = Y[:, :, :48]
-    Y[np.where( np.isnan(Y) )] = 0
-    Y[np.where( Y <= 0 )] = 0
+    xtrain, ytrain, xvalid, yvalid, xtest, ytest = data_split(_xfiles, _yfiles, 0.7225, 0.85, maskname='sample_train_valid_test_mask.npz')
+    train_generator = data_generator(xtrain, ytrain, _level1, _level2, batch_size=_batchsize)
+    valid_generator = data_generator(xvalid, yvalid, _level1, _level2, batch_size=_batchsize)
 
-    xvalid, yvalid = data_split(X, Y, 0.1)
 
-    csv_logger = CSVLogger('train_DLSOC.csv', append=True, separator=';')
-    earlystopper = EarlyStopping(patience=10, verbose=1)
-    checkpointer = ModelCheckpoint('SOC_checkpt.h5', verbose=1, save_best_only=True)
-    info = soc_model.train(X, Y, validation_data=(xvalid, yvalid), batch_size=_batchsize, epochs=250, shuffle=True, 
+    csv_logger = CSVLogger( 'sample_log.csv' , append=True, separator=';')
+    earlystopper = EarlyStopping(patience=20, verbose=1)
+    checkpointer = ModelCheckpoint('checkpt_{val_loss:.2e}_example.h5', verbose=1, save_best_only=True)
+    soc_model.train(train_generator,
+                        validation_data=valid_generator, epochs=250,
                         callbacks=[earlystopper, checkpointer, csv_logger])
 
     soc_model.save_model(args.outname)
-
