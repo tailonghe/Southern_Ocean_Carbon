@@ -42,14 +42,14 @@ Dissolved inorganic carbon (DIC)                        | B-SOSE              | 
 - To download ERA5 data, a CDS account and a configuration file (.cdsapirc in your home directory) have to be set up. Instructions are documented [here](https://cds.climate.copernicus.eu/api-how-to#install-the-cds-api-key).
 - It has to be stressed that the net download time could take ~1 week, depending on the download speed. A bash code to automate the downloading process could be helpful in reducing the time required.
 
-## 3. Steps to process data before training
+## 3. Steps to preprocess data before training
 
 ### 3.1) Regrid raw datasets using Climate Data Operators (CDO)
  - The raw datasets from B-SOSE (iter105), ERA5, GlobColour, and OSCAR have different resolutions. They have to be regridded to a 1° × 1° grid to be used by the DL model.
  - The datasets mentioned above are regridded to the 1° × 1° grid (grid file provided as `utils/SOCO2.grid`) using the nearest neighbor remapping function from the Climate Data Operators ([Link](https://code.mpimet.mpg.de/projects/cdo/embedded/index.html#x1-6600002.12.3)).
  - Example command: `cdo remapnn,utils/SOCO2.grid infile.nc outfile.nc`
 
-### 3.2) Process datasets offline to NumPy readable format (.npy/.npz) 
+### 3.2) Preprocess datasets offline to NumPy readable format (.npy/.npz) 
  - The desired shape of input and output data arrays of the DL model is `(nsample, nlatitude, nlongitude, nvariable/ndepth)`. The regridded raw datasets have to be further processed to a NumPy readable format with the correct dimensions.
  - `nsample` could be any nonzero possitive integer. `nlatitude=48` and `nlongitude=360` to accommodate the 1° × 1° grid over the Southern Ocean. For the input data, `nvariable=10` for the 10 physical variables, whereas `ndepth=48` for the output data (DIC concentrations at 48 vertical levels).
  - The phase-1 training datasets (X and Y) are prepared using 3-day average fields from B-SOSE and hourly fields from ERA-5. This dataset covers from 1 Jan. 2008 to 31 Dec. 2012.
@@ -69,7 +69,7 @@ Dissolved inorganic carbon (DIC)                        | B-SOSE              | 
  - The scripts used to process the B-SOSE and ERA5 datasets are provided as the `example_data/scripts/data_prepare_iter105.py` file.
  - Example datasets used in the demo are stored in the `example_data/phase1_example_data/` folder.
 
-### 3.3) Process in situ datasets offline
+### 3.3) Preprocess in situ datasets offline
  - In situ datasets are used in the second training phase. They also have to be aggregated to the 1° × 1° grid to be used by the U-net.
  - The phase-2 input datasets (X) are prepared using physical variables from sources mentioned in Table 2.1.
  - The phase-2 output datasets (Y) are prepared by aggregating measurements from Argo/GLODAPv2. The Argo data covers from 2014 to 2019, whereas the GLODAPv2 data covers from 1993 to 2019.
@@ -108,7 +108,7 @@ Dissolved inorganic carbon (DIC)                        | B-SOSE              | 
 ### 3.4) Estimated run time
 - The net time required by this data preparation process can take 12~24 hours. A bash code to automate this process could be helpful in reducing the time required.
 
-## 4. Getting started with training a demo model
+## 4. Train a demo U-net model
 ### 4.1) Usage using a Jupyter Notebook
  - The example.ipynb jupyter notebook contains several examples about the usage of the U-net model. 
 ### 4.2) Usage using command lines
